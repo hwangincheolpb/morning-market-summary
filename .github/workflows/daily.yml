@@ -31,11 +31,14 @@ jobs:
           with open('config.py','r',encoding='utf-8') as f: c=f.read()
           c=c.replace('YOUR_GEMINI_API_KEY', os.environ.get('GEMINI_API_KEY',''))
           c=c.replace('YOUR_BOT_TOKEN', os.environ.get('TELEGRAM_BOT_TOKEN',''))
-          tid=os.environ.get('TELEGRAM_SEND_TO_CHAT_ID','')
-          val=repr(int(tid)) if (tid and tid.isdigit()) else 'None'
+          tid=os.environ.get('TELEGRAM_SEND_TO_CHAT_ID','').strip()
+          val=repr(int(tid)) if (tid and tid.lstrip('-').isdigit()) else 'None'
           c=c.replace('TELEGRAM_SEND_TO_CHAT_ID = None', 'TELEGRAM_SEND_TO_CHAT_ID = '+val)
           with open('config.py','w',encoding='utf-8') as f: f.write(c)
           "
+
+      - name: Check config (BOT_TOKEN / CHAT_ID 설정 여부)
+        run: python -c "import config; b=bool(getattr(config,'TELEGRAM_BOT_TOKEN',None)); c=bool(getattr(config,'TELEGRAM_SEND_TO_CHAT_ID',None)); print('BOT_TOKEN:', b, 'CHAT_ID:', c); exit(0 if (b and c) else 1)"
 
       - name: Run market summary
         run: python main.py

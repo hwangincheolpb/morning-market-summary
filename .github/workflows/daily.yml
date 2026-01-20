@@ -1,0 +1,41 @@
+# 아침 시황 요약 자동화 - GitHub Actions (stock_bot 패턴)
+# 매일 07:00 KST = UTC 22:00 실행, workflow_dispatch로 수동 실행 가능
+name: Daily Market Summary
+on:
+  schedule:
+    - cron: "0 22 * * *"   # UTC 22:00 = KST 07:00
+  workflow_dispatch:
+jobs:
+  run:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install dependencies
+        run: pip install --no-cache-dir -r requirements.txt
+
+      - name: Create config from Secrets
+        env:
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+          TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
+          TELEGRAM_SEND_TO_CHAT_ID: ${{ secrets.TELEGRAM_SEND_TO_CHAT_ID }}
+        run: |
+          cp config.py.example config.py
+          python -c "
+          import os
+          with open('config.py','r',encoding='utf-8') as f: c=f.read()
+          c=c.replace('YOUR_GEMINI_API_KEY', os.environ.get('GEMINI_API_KEY',''))
+          c=c.replace('YOUR_BOT_TOKEN', os.environ.get('TELEGRAM_BOT_TOKEN',''))
+          tid=os.environ.get('TELEGRAM_SEND_TO_CHAT_ID','')
+          val=repr(int(tid)) if (tid and tid.isdigit()) else 'None'
+          c=c.replace('TELEGRAM_SEND_TO_CHAT_ID = None', 'TELEGRAM_SEND_TO_CHAT_ID = '+val)
+          with open('config.py','w',encoding='utf-8') as f: f.write(c)
+          "
+
+      - name: Run market summary
+        run: python main.py

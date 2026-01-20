@@ -1,0 +1,9 @@
+python-telegram-bot>=20.0
+google-generativeai>=0.3.0
+requests>=2.31.0
+beautifulsoup4>=4.12.0
+schedule>=1.2.0
+python-dateutil>=2.8.0
+lxml>=4.9.0
+pytz>=2023.3
+yfinance>=0.2.0

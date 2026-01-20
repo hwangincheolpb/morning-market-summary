@@ -1,0 +1,42 @@
+# 설정 파일 예시
+# 이 파일을 config.py로 복사하고 실제 값으로 채워주세요
+
+# ============================================
+# 필수 설정 (반드시 입력 필요)
+# ============================================
+
+# Gemini API 설정 (필수)
+GEMINI_API_KEY = "YOUR_GEMINI_API_KEY"
+# 발급: https://makersuite.google.com/app/apikey
+
+# 텔레그램 봇 설정 (발송용 - 필수)
+TELEGRAM_BOT_TOKEN = "YOUR_BOT_TOKEN"
+# 발급: 텔레그램에서 @BotFather에게 /newbot 명령
+
+TELEGRAM_SEND_TO_CHAT_ID = None  # 발송할 내 텔레그램 채팅 ID (숫자)
+# 확인: 텔레그램에서 @userinfobot에게 메시지 보내기
+
+# ============================================
+# 선택 설정 (데이터 소스)
+# ============================================
+
+# 텔레그램 채널 수집 (선택)
+TELEGRAM_CHANNEL_USERNAME = "shmstory"  # @shmstory 채널
+
+# Alpha Vantage API (선택 - 뉴스 데이터용)
+ALPHA_VANTAGE_API_KEY = ""  # 비워두면 사용 안 함
+# 발급: https://www.alphavantage.co/support/#api-key
+# 무료: 25 requests/day, 5 requests/minute
+
+# ============================================
+# 실행 설정
+# ============================================
+
+# 자동 실행 시간 (HH:MM 형식)
+AUTO_RUN_TIME = "07:00"
+
+# 시간대
+TIMEZONE = "Asia/Seoul"
+
+# 요약 양식
+USE_DETAILED_FORMAT = False  # True: 상세 버전, False: 간결 버전
